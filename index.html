@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Carta Aberta — A todos que convivem comigo</title>
+
+  <!-- Meta tags para manter o suspense ao compartilhar o link no WhatsApp -->
+  <meta name="description" content="Uma carta aberta a todos que convivem comigo. Toque no lacre para abrir." />
+  <meta property="og:title" content="CARTA ABERTA" />
+  <meta property="og:description" content="A todos que convivem comigo..." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#140f12" />
+
+  <!-- Google Fonts: Playfair Display (serifada solene) + Inter (limpa e legível) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       VARIÁVEIS E CONFIGURAÇÕES GLOBAIS
+       ========================================================================== */
+    :root {
+      --bg-base: #120e10;
+      --bg-wine-glow: rgba(88, 28, 38, 0.36);
+      --bg-warm-glow: rgba(74, 52, 44, 0.22);
+      --paper-cream: #f2eadb;
+      --paper-mid: #e6dac3;
+      --paper-dark: #d5c5a7;
+      --paper-inside: #c5b392;
+      --ink-dark: #1b1815;
+      --ink-muted: #5a5248;
+      --wax-highlight: #c93b42;
+      --wax-light: #9e2128;
+      --wax-base: #74141a;
+      --wax-dark: #480a0e;
+      --gold: #cfa960;
+      --text-light: #f4eee4;
+      --text-subtle: rgba(244, 238, 228, 0.66);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: var(--bg-base);
+      color: var(--text-light);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       FUNDO ATMOSFÉRICO (GRAFITE / VINHO ESCURO COM VINHETA)
+       ========================================================================== */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background:
+        radial-gradient(circle at 50% 44%, var(--bg-wine-glow) 0%, var(--bg-warm-glow) 34%, rgba(18, 14, 16, 0.94) 68%, #0a0809 100%);
+      overflow: hidden;
+    }
+
+    /* Vinheta sutil nas bordas */
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.58) 100%);
+      z-index: 1;
+    }
+
+    /* Granulação cinematográfica discreta */
+    .stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.045;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Canvas dos confetes festivos */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    /* ==========================================================================
+       CABEÇALHO SOLENE (SUSPENSE INICIAL)
+       ========================================================================== */
+    .intro-header {
+      text-align: center;
+      margin-bottom: clamp(1.75rem, 5vh, 2.75rem);
+      z-index: 10;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .intro-header.is-hidden {
+      opacity: 0;
+      transform: translateY(-16px);
+      pointer-events: none;
+    }
+
+    .stamp-label {
+      display: inline-block;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding-bottom: 0.55rem;
+      position: relative;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    .stamp-label::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 52px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .intro-subtitle {
+      margin-top: 0.7rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+      color: var(--text-subtle);
+      letter-spacing: 0.03em;
+    }
+
+    /* ==========================================================================
+       CENA 3D DO ENVELOPE FECHADO
+       ========================================================================== */
+    .envelope-scene {
+      position: relative;
+      width: min(88vw, 376px);
+      aspect-ratio: 1.44 / 1;
+      perspective: 1200px;
+      z-index: 15;
+      transition: opacity 0.55s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .envelope-scene.is-receded {
+      opacity: 0;
+      transform: scale(0.92) translateY(24px);
+      pointer-events: none;
+    }
+
+    .envelope-button {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      display: block;
+      outline: none;
+      transform-style: preserve-3d;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .envelope-button:hover:not(.is-opening),
+    .envelope-button:focus-visible:not(.is-opening) {
+      transform: translateY(-4px) scale(1.015);
+    }
+
+    .envelope-button:active:not(.is-opening) {
+      transform: translateY(-1px) scale(0.99);
+    }
+
+    .envelope-button:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 10px;
+      border-radius: 8px;
+    }
+
+    /* Sombra projetada sob o envelope */
+    .envelope-shadow {
+      position: absolute;
+      inset: 8% 3% -10% 3%;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0) 72%);
+      filter: blur(16px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Corpo principal do envelope */
+    .envelope-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(160deg, var(--paper-inside) 0%, #b5a17e 100%);
+      box-shadow:
+        0 24px 52px rgba(0, 0, 0, 0.62),
+        0 2px 6px rgba(0, 0, 0, 0.38),
+        inset 0 0 28px rgba(58, 42, 24, 0.24);
+      transform-style: preserve-3d;
+    }
+
+    /* Textura sutil de papel nobre / algodão */
+    .paper-texture {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0.17;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+    }
+
+    /* Carta branca que desliza para cima ao abrir o envelope */
+    .letter-peek {
+      position: absolute;
+      left: 5%;
+      right: 5%;
+      bottom: 6%;
+      height: 86%;
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.24);
+      z-index: 2;
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      border: 1px solid rgba(180, 158, 122, 0.32);
+      transform: translateY(0);
+      transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .letter-peek.is-risen {
+      transform: translateY(-64%);
+    }
+
+    .letter-peek-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-top: 0.2rem;
+    }
+
+    .letter-peek-lines {
+      width: 72%;
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.42rem;
+      opacity: 0.28;
+    }
+
+    .letter-peek-lines span {
+      display: block;
+      height: 2px;
+      background: var(--ink-muted);
+      border-radius: 2px;
+    }
+
+    .letter-peek-lines span:last-child {
+      width: 60%;
+      margin: 0 auto;
+    }
+
+    /* Bolso frontal do envelope com dobras em SVG */
+    .envelope-pocket {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      border-radius: 6px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-pocket svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Aba superior triangular com rotação 3D */
+    .envelope-flap-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 58%;
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      z-index: 4;
+      transition: transform 0.75s cubic-bezier(0.42, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .envelope-flap-wrap.is-open {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-flap-wrap.is-behind {
+      z-index: 1;
+    }
+
+    .envelope-flap-front,
+    .envelope-flap-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .envelope-flap-back {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-flap-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 5px 8px rgba(28, 18, 12, 0.26));
+    }
+
+    /* Lacre de cera vermelho-vinho realista em relevo */
+    .wax-seal {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      width: clamp(56px, 15.5vw, 68px);
+      height: clamp(56px, 15.5vw, 68px);
+      transform: translate(-50%, -44%) scale(1);
+      z-index: 5;
+      border-radius: 52% 48% 51% 49% / 48% 53% 47% 52%;
+      background:
+        radial-gradient(circle at 32% 28%, var(--wax-highlight) 0%, var(--wax-light) 26%, var(--wax-base) 66%, var(--wax-dark) 100%);
+      box-shadow:
+        0 8px 16px rgba(14, 3, 4, 0.58),
+        0 2px 4px rgba(14, 3, 4, 0.45),
+        inset 0 2px 3px rgba(255, 200, 200, 0.3),
+        inset 0 -3px 7px rgba(36, 3, 5, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.38s cubic-bezier(0.36, 0, 0.66, -0.56), opacity 0.32s ease;
+      pointer-events: none;
+    }
+
+    .wax-seal::before {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 204, 204, 0.22);
+      box-shadow:
+        inset 0 1px 3px rgba(45, 5, 7, 0.68),
+        0 1px 1px rgba(255, 194, 194, 0.18);
+    }
+
+    .wax-monogram {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-weight: 600;
+      color: rgba(248, 214, 209, 0.82);
+      text-shadow:
+        0 1px 2px rgba(42, 4, 6, 0.88),
+        0 -1px 0 rgba(255, 205, 205, 0.2);
+      user-select: none;
+    }
+
+    .wax-seal.is-broken {
+      transform: translate(-50%, -44%) scale(1.25);
+      opacity: 0;
+    }
+
+    /* Instrução discreta pulsando abaixo do envelope */
+    .tap-prompt {
+      margin-top: clamp(1.65rem, 4.5vh, 2.45rem);
+      font-size: 0.84rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      animation: gentlePulse 2.4s ease-in-out infinite;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .tap-prompt.is-hidden {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: none;
+      pointer-events: none;
+    }
+
+    .tap-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--gold);
+      box-shadow: 0 0 8px rgba(207, 169, 96, 0.75);
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.46; transform: translateY(0); }
+      50% { opacity: 0.96; transform: translateY(-2px); }
+    }
+
+    /* ==========================================================================
+       CARTÃO ABERTO (A REVELAÇÃO — FUNDO BRANCO PURO #FFFFFF)
+       ========================================================================== */
+    .reveal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: safe center;
+      padding: max(1.25rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s ease;
+    }
+
+    .reveal-overlay.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .reveal-wrapper {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto 0;
+      transform: translateY(44px) scale(0.88);
+      transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-overlay.is-visible .reveal-wrapper {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Cartão branco puro para integração perfeita com a ilustração */
+    .reveal-card {
+      width: 100%;
+      background-color: #FFFFFF;
+      color: var(--ink-dark);
+      border-radius: 16px;
+      overflow: hidden;
+      padding: clamp(0.75rem, 2.8vw, 1.25rem) clamp(0.75rem, 2.8vw, 1.25rem) clamp(1.5rem, 4.5vw, 2.1rem);
+      box-shadow:
+        0 28px 68px rgba(0, 0, 0, 0.65),
+        0 6px 20px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    /* Container da imagem: 100% fiel à proporção original, zero corte */
+    .illustration-wrap {
+      width: 100%;
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .illustration-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Divisória sutil e elegante entre a ilustração e a mensagem */
+    .card-divider {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: clamp(1.1rem, 3.2vw, 1.5rem) 0 clamp(0.9rem, 2.6vw, 1.2rem);
+    }
+
+    .card-divider::before,
+    .card-divider::after {
+      content: "";
+      flex: 1;
+      max-width: 88px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196, 158, 92, 0.65), transparent);
+    }
+
+    .divider-star {
+      width: 13px;
+      height: 13px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* Mensagem festiva em tipografia serifada sofisticada (mantendo o contraste cômico) */
+    .greeting-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.42rem, 5.2vw, 1.85rem);
+      font-weight: 600;
+      line-height: 1.26;
+      color: var(--ink-dark);
+      letter-spacing: -0.01em;
+      padding: 0 0.5rem;
+    }
+
+    .greeting-sub {
+      margin-top: 0.55rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 3.4vw, 1.08rem);
+      color: var(--ink-muted);
+      padding: 0 0.5rem;
+    }
+
+    /* Botão discreto no rodapé fora do cartão para fechar o envelope */
+    .replay-button {
+      margin-top: 1.15rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(244, 238, 228, 0.22);
+      color: rgba(244, 238, 228, 0.82);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.68rem 1.35rem;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.2s ease;
+    }
+
+    .replay-button:hover,
+    .replay-button:focus-visible {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(207, 169, 96, 0.65);
+      color: #FFFFFF;
+      outline: none;
+    }
+
+    .replay-button:active {
+      transform: scale(0.97);
+    }
+
+    /* Ajustes finos para celulares em paisagem / telas bem baixas */
+    @media (max-height: 560px) {
+      .intro-header {
+        margin-bottom: 1rem;
+      }
+      .tap-prompt {
+        margin-top: 1rem;
+      }
+      .envelope-scene {
+        width: min(56vw, 290px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas de confetes coloridos e dourados -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <main class="stage">
+    <!-- Cabeçalho sério e dramático -->
+    <header class="intro-header" id="intro-header">
+      <h1 class="stamp-label">Carta Aberta</h1>
+      <p class="intro-subtitle">A todos que convivem comigo</p>
+    </header>
+
+    <!-- Envelope 3D lacrado -->
+    <section class="envelope-scene" id="envelope-scene" aria-label="Envelope lacrado">
+      <button
+        type="button"
+        class="envelope-button"
+        id="envelope-btn"
+        aria-label="Toque no lacre para abrir a carta"
+      >
+        <div class="envelope-shadow"></div>
+
+        <div class="envelope-body">
+          <div class="paper-texture"></div>
+
+          <!-- Folha branca que desliza para fora do envelope -->
+          <div class="letter-peek" id="letter-peek" aria-hidden="true">
+            <span class="letter-peek-title">Carta Aberta</span>
+            <div class="letter-peek-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <!-- Bolso frontal do envelope (dobras em SVG) -->
+          <div class="envelope-pocket" aria-hidden="true">
+            <svg viewBox="0 0 380 264" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="pocketLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ebe0cc" />
+                  <stop offset="100%" stop-color="#d8c8ab" />
+                </linearGradient>
+                <linearGradient id="pocketRight" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#e6dac3" />
+                  <stop offset="100%" stop-color="#d2c0a0" />
+                </linearGradient>
+                <linearGradient id="pocketBottom" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#f2e8d6" />
+                  <stop offset="100%" stop-color="#dcccb0" />
+                </linearGradient>
+                <filter id="foldShadow" x="-10%" y="-10%" width="120%" height="120%">
+                  <feDropShadow dx="0" dy="-2" stdDeviation="3" flood-color="#3c2d19" flood-opacity="0.16" />
+                </filter>
+              </defs>
+              <polygon points="0,0 198,136 0,264" fill="url(#pocketLeft)" />
+              <polygon points="380,0 182,136 380,264" fill="url(#pocketRight)" />
+              <polygon points="0,264 176,126 204,126 380,264" fill="url(#pocketBottom)" filter="url(#foldShadow)" />
+              <path d="M0,264 L176,126 L204,126 L380,264" fill="none" stroke="rgba(110, 88, 58, 0.18)" stroke-width="1" />
+            </svg>
+            <div class="paper-texture"></div>
+          </div>
+
+          <!-- Aba superior triangular 3D -->
+          <div class="envelope-flap-wrap" id="envelope-flap" aria-hidden="true">
+            <div class="envelope-flap-front">
+              <svg viewBox="0 0 380 154" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="flapOuter" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stop-color="#f5ecdc" />
+                    <stop offset="100%" stop-color="#dfd0b4" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,0 L380,0 L204,142 Q190,152 176,142 Z" fill="url(#flapOuter)" />
+                <path d="M0,0 L176,142 Q190,152 204,142 L380,0" fill="none" stroke="rgba(125, 102, 70, 0.22)" stroke-width="1" />
+              </svg>
+            </div>
+            <div class="envelope-flap-back">
+              <svg viewBox="0 0 380 154" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="flapInner" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stop-color="#cab897" />
+                    <stop offset="100%" stop-color="#ded0b6" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,0 L380,0 L204,142 Q190,152 176,142 Z" fill="url(#flapInner)" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Lacre de cera vermelho-vinho com monograma C -->
+          <div class="wax-seal" id="wax-seal" aria-hidden="true">
+            <span class="wax-monogram">C</span>
+          </div>
+        </div>
+      </button>
+    </section>
+
+    <!-- Instrução discreta pulsando -->
+    <p class="tap-prompt" id="tap-prompt">
+      <span class="tap-dot" aria-hidden="true"></span>
+      Toque no lacre para abrir
+    </p>
+  </main>
+
+  <!-- Cartão aberto (A revelação) -->
+  <div
+    class="reveal-overlay"
+    id="reveal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="greeting-heading"
+    aria-hidden="true"
+  >
+    <div class="reveal-wrapper">
+      <article class="reveal-card">
+        <!-- Ilustração em destaque preservando 100% da proporção original -->
+        <div class="illustration-wrap">
+          <img
+            src="image_4e2bac.jpg"
+            alt="Ilustração cômica de fim de ano: SURTEI! Se precisar de mim, desprecise. Final de ano chegou e a cabeça do palhaço precisa de respiro."
+            class="illustration-img"
+            onerror="this.onerror=null; this.src='https://placehold.co/800x600/FFFFFF/1B1815?text=Coloque+image_4e2bac.jpg+na+mesma+pasta';"
+          />
+        </div>
+
+        <!-- Divisória sutil e elegante -->
+        <div class="card-divider" aria-hidden="true">
+          <svg class="divider-star" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L14.6 9.4L23 12L14.6 14.6L12 23L9.4 14.6L1 12L9.4 9.4L12 1Z" />
+          </svg>
+        </div>
+
+        <!-- Mensagem festiva -->
+        <h2 class="greeting-heading" id="greeting-heading">
+          Feliz Natal e um Próspero Ano Novo!
+        </h2>
+        <p class="greeting-sub">
+          Nos vemos (talvez) no ano que vem ✨
+        </p>
+      </article>
+
+      <!-- Botão discreto no rodapé para resetar a animação -->
+      <button type="button" class="replay-button" id="replay-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        Fechar envelope
+      </button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Elementos da cena
+      const introHeader = document.getElementById('intro-header');
+      const envelopeScene = document.getElementById('envelope-scene');
+      const envelopeBtn = document.getElementById('envelope-btn');
+      const waxSeal = document.getElementById('wax-seal');
+      const envelopeFlap = document.getElementById('envelope-flap');
+      const letterPeek = document.getElementById('letter-peek');
+      const tapPrompt = document.getElementById('tap-prompt');
+      const revealOverlay = document.getElementById('reveal-overlay');
+      const replayBtn = document.getElementById('replay-btn');
+
+      // =========================================================================
+      // CONTROLE DA ANIMAÇÃO DE ABERTURA E FECHAMENTO
+      // =========================================================================
+      let state = 'closed'; // 'closed' | 'opening' | 'open' | 'closing'
+      let timers = [];
+
+      function schedule(fn, delay) {
+        const id = window.setTimeout(fn, delay);
+        timers.push(id);
+        return id;
+      }
+
+      function clearScheduled() {
+        timers.forEach((id) => window.clearTimeout(id));
+        timers = [];
+      }
+
+      function openEnvelope() {
+        if (state !== 'closed') return;
+        state = 'opening';
+        clearScheduled();
+
+        envelopeBtn.classList.add('is-opening');
+        tapPrompt.classList.add('is-hidden');
+        introHeader.classList.add('is-hidden');
+
+        // 1. Lacre de cera se desfaz
+        waxSeal.classList.add('is-broken');
+
+        // 2. Aba superior gira suavemente em 3D
+        schedule(() => {
+          envelopeFlap.classList.add('is-open');
+        }, 180);
+
+        // 3. Aba vai para trás para a carta deslizar na frente
+        schedule(() => {
+          envelopeFlap.classList.add('is-behind');
+        }, 520);
+
+        // 4. Carta desliza para fora do envelope
+        schedule(() => {
+          letterPeek.classList.add('is-risen');
+        }, 580);
+
+        // 5. Envelope recua e o cartão branco aparece no centro
+        schedule(() => {
+          envelopeScene.classList.add('is-receded');
+          revealOverlay.scrollTop = 0;
+          revealOverlay.classList.add('is-visible');
+          revealOverlay.setAttribute('aria-hidden', 'false');
+        }, 1000);
+
+        // 6. Dispara chuva divertida de confetes coloridos e dourados
+        schedule(() => {
+          triggerFestiveConfetti();
+          state = 'open';
+        }, 1180);
+      }
+
+      function closeEnvelope() {
+        if (state !== 'open') return;
+        state = 'closing';
+        clearScheduled();
+
+        // 1. Oculta o cartão aberto
+        revealOverlay.classList.remove('is-visible');
+        revealOverlay.setAttribute('aria-hidden', 'true');
+
+        // 2. Retorna o envelope para a tela
+        schedule(() => {
+          envelopeScene.classList.remove('is-receded');
+        }, 220);
+
+        // 3. Recolhe a carta de volta ao bolso
+        schedule(() => {
+          letterPeek.classList.remove('is-risen');
+        }, 380);
+
+        // 4. Fecha a aba superior em 3D
+        schedule(() => {
+          envelopeFlap.classList.remove('is-open');
+        }, 700);
+
+        schedule(() => {
+          envelopeFlap.classList.remove('is-behind');
+        }, 1020);
+
+        // 5. Restaura o lacre, título e aviso pulsante
+        schedule(() => {
+          waxSeal.classList.remove('is-broken');
+          introHeader.classList.remove('is-hidden');
+          tapPrompt.classList.remove('is-hidden');
+          envelopeBtn.classList.remove('is-opening');
+          state = 'closed';
+        }, 1200);
+      }
+
+      envelopeBtn.addEventListener('click', openEnvelope);
+      replayBtn.addEventListener('click', closeEnvelope);
+
+      // Suporte à tecla Escape para fechar o cartão
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && state === 'open') {
+          closeEnvelope();
+        }
+      });
+
+      // =========================================================================
+      // CHUVA DE CONFETES COLORIDOS E DOURADOS (COMBINANDO COM A ILUSTRAÇÃO)
+      // =========================================================================
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animFrameId = null;
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function triggerFestiveConfetti() {
+        // Paleta inspirada nos confetes e estrelas da ilustração + dourado festivo
+        const colors = [
+          '#f2c94c', // amarelo estrela
+          '#cfa960', // dourado elegante
+          '#e05245', // vermelho calendário
+          '#6eb6e8', // azul confete
+          '#7fc98a', // verde menta
+          '#a77fd9', // lilás confete
+          '#f5b041'  // laranja espiral
+        ];
+
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const count = w < 500 ? 70 : 105;
+
+        for (let i = 0; i < count; i++) {
+          const fromTop = i % 3 === 0;
+          const angle = fromTop
+            ? Math.PI / 2 + (Math.random() - 0.5) * 0.9
+            : -Math.PI / 2 + (Math.random() - 0.5) * 1.55;
+          const speed = fromTop ? 2.2 + Math.random() * 4.2 : 5 + Math.random() * 8.5;
+          const shapeRoll = Math.random();
+          const shape = shapeRoll > 0.72 ? 'star' : shapeRoll > 0.35 ? 'ribbon' : 'dot';
+
+          particles.push({
+            x: fromTop ? Math.random() * w : w * (0.2 + Math.random() * 0.6),
+            y: fromTop ? -12 - Math.random() * 40 : h * (0.34 + Math.random() * 0.16),
+            vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 2.4,
+            vy: Math.sin(angle) * speed - (fromTop ? 0 : Math.random() * 2.5),
+            gravity: 0.13 + Math.random() * 0.08,
+            drag: 0.986,
+            size: shape === 'star' ? 4 + Math.random() * 4 : 4.5 + Math.random() * 5.5,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: (Math.random() - 0.5) * 0.18,
+            tilt: Math.random() * Math.PI,
+            tiltSpeed: 0.08 + Math.random() * 0.1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            shape,
+            alpha: 1,
+            decay: 0.0052 + Math.random() * 0.0045
+          });
+        }
+
+        if (!animFrameId) {
+          animateParticles();
+        }
+      }
+
+      function drawStar(radius) {
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          const outerAngle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+          const innerAngle = outerAngle + Math.PI / 5;
+          const ox = Math.cos(outerAngle) * radius;
+          const oy = Math.sin(outerAngle) * radius;
+          const ix = Math.cos(innerAngle) * (radius * 0.45);
+          const iy = Math.sin(innerAngle) * (radius * 0.45);
+          if (i === 0) ctx.moveTo(ox, oy);
+          else ctx.lineTo(ox, oy);
+          ctx.lineTo(ix, iy);
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.vx *= p.drag;
+          p.vy = p.vy * p.drag + p.gravity;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rotation += p.rotationSpeed;
+          p.tilt += p.tiltSpeed;
+          p.alpha -= p.decay;
+
+          if (p.alpha <= 0 || p.y > window.innerHeight + 40) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+
+          if (p.shape === 'star') {
+            drawStar(p.size);
+          } else if (p.shape === 'dot') {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size * 0.42, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.scale(1, Math.cos(p.tilt));
+            ctx.fillRect(-p.size / 2, -p.size * 0.34, p.size, p.size * 0.68);
+          }
+
+          ctx.restore();
+        }
+
+        if (particles.length > 0) {
+          animFrameId = window.requestAnimationFrame(animateParticles);
+        } else {
+          animFrameId = null;
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
